@@ -1,5 +1,5 @@
 import requests
-import samlib_parser
+from . import parser as samlib_parser
 #import logging
 import datetime
 #from dto import Book
