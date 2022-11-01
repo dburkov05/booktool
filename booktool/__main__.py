@@ -18,7 +18,7 @@ class Samlib:
         if book:
             data = self._api.get_book_property('/'.join(path))
         else:
-            data = self._api.get_author_property(author)
+            data = self._api.get_author_property('/'.join(path))
         return data
 
     def get_list(self, path):
@@ -28,6 +28,10 @@ class AuthorToday:
     def __init__(self):
         self._api = author_today.AuthorToday()
     def get_property(self, path):
+        if len(path.split('/')) == 2:
+            return self._api.get_author_property(path.split('/')[1])
+        if path.split('/')[1] == 'work':
+            return self._api.get_book_property(path.split('/')[2])
         return {}
     def get_list(self, path):
         return self._api.get_list(path.split('/')[1])

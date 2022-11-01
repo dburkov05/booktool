@@ -55,7 +55,8 @@ class Samlib:
 
     #public methods
 
-    def get_author_property(self, author_nickname):
+    def get_author_property(self, path):
+        author_nickname = path.split('/')[0]
         page = self.__get_response(f'{self._host}/{author_nickname[0]}/{author_nickname}')
         if(page == None):
             return None

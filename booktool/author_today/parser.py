@@ -34,3 +34,10 @@ def getBooks(page):
         }
         books.append(book)
     return books
+
+def getAuthorAbout(page):
+    soup = BeautifulSoup(page, 'lxml')
+    data = {}
+ 
+    return data
+ 
