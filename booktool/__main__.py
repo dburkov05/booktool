@@ -3,19 +3,20 @@ import argparse
 import json
 
 import samlib
+import author_today
 
 class Samlib:
     def __init__(self):
         self._api = samlib.Samlib('http://samlib.ru')
 
     def get_property(self, path):
-        path = path.split('/')
-        author = path[1]
+        path = path.split('/')[1:]
+        author = path[0]
         book = None
-        if len(path) > 2:
-            book = path[2] 
+        if len(path) > 1:
+            book = path[1] 
         if book:
-            data = self._api.get_book_property(author, book)
+            data = self._api.get_book_property('/'.join(path))
         else:
             data = self._api.get_author_property(author)
         return data
@@ -23,9 +24,18 @@ class Samlib:
     def get_list(self, path):
         return self._api.get_list(path.split('/')[1], '')
 
+class AuthorToday:
+    def __init__(self):
+        self._api = author_today.AuthorToday()
+    def get_property(self, path):
+        return {}
+    def get_list(self, path):
+        return self._api.get_list(path.split('/')[1])
+
 endpoint = {}
 
 endpoint['samlib'] = Samlib()
+endpoint['at'] = AuthorToday()
 
 def get_list(args):
     path = args.path
@@ -86,7 +96,7 @@ def main():
     args = parser.parse_args()
     data = args._func(args)
     #print('[END]', args)
-    print(json.dumps(data, indent=4, ensure_ascii=False))
+    print(json.dumps(data, indent=4, ensure_ascii=False, default=str))
 
 if __name__ == '__main__':
     main()

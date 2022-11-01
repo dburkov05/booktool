@@ -3,16 +3,16 @@ from . import parser as samlib_parser
 #import logging
 import datetime
 #from dto import Book
-from typing import TypedDict
+#from typing import TypedDict
 
-class Book(TypedDict):
-    title: str
-    id: str
-    author: str #samlib:author_id
+#class Book(TypedDict):
+#    title: str
+#    id: str
+#    author: str #samlib:author_id
 #    genre: str
 #    rate: str
-    size: int #kilo bite
-    annotation: str
+#    size: int #kilo bite
+#    annotation: str
 
 class Samlib:
     def __init__(self, host):
@@ -67,13 +67,13 @@ class Samlib:
         books = samlib_parser.getBooks(page, False)
         out = []
         for elem in books:
-            out.append(Book(
-                title = elem['title'],
-                id = 'samlib' + '/' + author_nickname + '/' + elem['link'][:-6],
-                author = 'samlib/' + author_nickname,
-                size = elem['size'],
-                annotation = elem['annotation'],
-            ))
+            out.append({
+                'title': elem['title'],
+                'id': author_nickname + '/' + elem['link'][:-6],
+                'size': elem['size'],
+                'annotation': elem['annotation'],
+                'platform': 'samlib'
+                })
         return out
 
     def get_books_from_author(self, author_nickname, include_subsections = False):
@@ -99,14 +99,16 @@ class Samlib:
             return True
         return False
     
-    def get_book_property(self, author_nickname, book_filename):
+    def get_book_property(self, book_id):
+        author_nickname, book_filename = book_id.split('/')
         data = {}
         page = self.__get_header(f'{self._host}/{author_nickname[0]}/{author_nickname}/{book_filename}.shtml')
         if(page == None):
             return None
         data = samlib_parser.getBookHeader(page)
-        data['author'] = f'samlib/{author_nickname}'
-        data['download'] = f'{self._host}/{author_nickname[0]}/{author_nickname}/{data["download"]}'
+        data['author'] = author_nickname
+        if data['download']:
+            data['download'] = f'{self._host}/{author_nickname[0]}/{author_nickname}/{data["download"]}'
         return data
     
     def get_updates(self, authors_nickname, date = None):
