@@ -73,7 +73,7 @@ def bind_get_prop(root):
     return parser
 
 def bind_get(root):
-    parser = root.add_parser('get')
+    parser = root.add_parser('net')
     parser.set_defaults(_func=lambda args: parser.print_help())
     subparsers = parser.add_subparsers()
     
