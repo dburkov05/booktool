@@ -1,7 +1,7 @@
 import requests
 import json
 from . import parser
-
+from ..dto import Book
 
 class AuthorToday:
     def __init__(self):
@@ -14,7 +14,16 @@ class AuthorToday:
     def get_list(self, author_id):
         url = f'{self._webHost}/u/{author_id}/works'
         page = requests.get(url, headers=self._headers).content.decode('utf8')
-        books = parser.getBooks(page)
+        raw_books = parser.getBooks(page)
+        books = []
+        for elem in raw_books:
+            books.append(Book(
+                id = elem['id'],
+                author = author_id,
+                title = elem['title'],
+                annotation = elem['annotation'],
+                origin = elem['platform']
+            ))
         return books
 
     def get_book_property(self, book_id):

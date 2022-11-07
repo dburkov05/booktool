@@ -1,5 +1,6 @@
 import requests
 from . import parser as samlib_parser
+from ..dto import Book
 #import logging
 import datetime
 #from dto import Book
@@ -13,6 +14,8 @@ import datetime
 #    rate: str
 #    size: int #kilo bite
 #    annotation: str
+
+
 
 class Samlib:
     def __init__(self, host):
@@ -68,13 +71,13 @@ class Samlib:
         books = samlib_parser.getBooks(page, False)
         out = []
         for elem in books:
-            out.append({
-                'title': elem['title'],
-                'id': author_nickname + '/' + elem['link'][:-6],
-                'size': elem['size'],
-                'annotation': elem['annotation'],
-                'platform': 'samlib'
-                })
+            out.append(Book(
+                title = elem['title'],
+                author = author_nickname,
+                id = author_nickname + '/' + elem['link'][:-6],
+                annotation = elem['annotation'],
+                origin = 'samlib'
+                ))
         return out
 
     def get_books_from_author(self, author_nickname, include_subsections = False):
