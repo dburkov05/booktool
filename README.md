@@ -3,4 +3,4 @@
 
 Поддерживаются следующие библиотеки:
 1) [samlib](http://samlib.ru)
-2) [author_today](https://author.today/)
+2) [AuthorToday](https://author.today/)
