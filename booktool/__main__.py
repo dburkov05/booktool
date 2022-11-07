@@ -2,8 +2,8 @@ import argparse
 
 import json
 
-import samlib
-import author_today
+from . import samlib
+from . import author_today
 
 class Samlib:
     def __init__(self):
